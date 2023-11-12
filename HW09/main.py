@@ -40,23 +40,16 @@ def change(args):
     name, phone = args
     dic_clients[name] = phone
     return f"contact {name} changed number {phone}"
-    # if name in dic_clients:
-    #     dic_clients[name] = phone
-    #     return f"contact {name} changed number {phone}"
-    # else:
-    #     return f"contact {name} not found"
+    
+
 
 @error_handler
 def phone(args):
     name = args[0]
     return f"contact {name} has number {dic_clients[name]}"
-    # if name in dic_clients:
-    #     return f"contact {name} has number { dic_clients.get(name)}"
-    # else:
-    #     return f"contact {name} not found"
-
-
-def input_parser(client_text: str) -> tuple:
+   
+    
+def input_parser(client_text):
     if client_text.lower().startswith("show all"):
         args = ""
         command = "show all"
@@ -79,8 +72,8 @@ dic_func = {"hello": hello,
 def main():
     while True:
         client_word = input("enter comand: ")
-        cl_1, cl_2 = input_parser(client_word)
-        result = cl_1(cl_2)
+        cw_0, cw_1 = input_parser(client_word)
+        result = cw_0(cw_1)
 
 
         if not result:
