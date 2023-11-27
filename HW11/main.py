@@ -37,6 +37,10 @@ class Phone(Field):
 
     def __str__(self):
         return self.value
+    
+
+class InvalidBirthdayError(Exception):
+    pass
 
 
 class Birthday(Field):
@@ -51,7 +55,7 @@ class Birthday(Field):
             date_time_obj = datetime.strptime(date_birthday, '%d-%m-%Y')
             self.__value = date_time_obj
         except ValueError:
-            pass
+            raise InvalidBirthdayError("Invalid birthday format")
 
 
 
