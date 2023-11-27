@@ -158,6 +158,12 @@ if __name__ == "__main__":
     john2_record.add_birthday("10-12-1995")
 
 
+    try:
+        john_record.add_birthday("invalid_date_format")  # Викинет виняток InvalidBirthdayError
+    except InvalidBirthdayError as e:
+        print(f"Caught an error outside Birthday class: {e}")
+
+
     # Додавання запису John до адресної книги
     book.add_record(john_record)
 
