@@ -1,5 +1,7 @@
 from collections import UserDict
 from datetime import datetime
+import pickle
+
 
 class Field:
     def __init__(self, value):
@@ -138,8 +140,38 @@ class AddressBook(UserDict):
             del self.data[name_]
 
 
+    def save_to_file(self, file_path='address_book.pkl'):
+        with open(file_path, 'wb') as file:
+            pickle.dump(self.data, file)
+
+
+    def load_from_file(self, file_path='address_book.pkl'):
+        try:
+            with open(file_path, 'rb') as file:
+                self.data = pickle.load(file)
+        except FileNotFoundError:
+            print(f"File {file_path} not found. Creating a new address book.")
+
+
+    def search(self, query):
+        results = {}
+        for name, record in self.data.items():
+            if query.lower() in name.lower():
+                results[name] = record
+            else:
+                for phone in record.phones:
+                    if query in phone.value:
+                        results[name] = record
+                        break
+        return results
+
+
+
 if __name__ == "__main__":
     book = AddressBook()
+
+    book.save_to_file()
+    book.load_from_file()
 
     john_record = Record("John")
     john_record.add_phone("1234567890")
@@ -166,11 +198,24 @@ if __name__ == "__main__":
 
     # Додавання запису John до адресної книги
     book.add_record(john_record)
+    book.add_record(john1_record)
+    book.add_record(john2_record)
 
     # Створення та додавання нового запису для Jane
     jane_record = Record("Jane")
     jane_record.add_phone("9876543210")
     book.add_record(jane_record)
+
+
+    search_query = input('Enter name or phone number to search: ')
+    search_results = book.search(search_query)
+
+    if search_results:
+        print('\nSearch results:')
+        for name, record in search_results.items():
+            print(record)
+    else:
+        print('No matching records found.')
 
     # Виведення всіх записів у книзі
     for name, record in book.data.items():
@@ -186,6 +231,7 @@ if __name__ == "__main__":
     # Пошук конкретного телефону у записі John
     found_phone = john.find_phone("5555555555")
     print(f"{john.name}: {found_phone}")  # Виведення: 5555555555
+
 
     # Видалення запису Jane
     book.delete("Jane")
